@@ -25,6 +25,14 @@ module.exports = class ZnApi {
             .then(response => Promise.resolve(response.data));
     }
 
+    async getRecords(formId) {
+        let self = this;
+        // Default limit is set to 20. We query over 200 to ensure all fields are returned.
+        return await self
+            .executeApiCommand(`forms/${formId}/records.json`, 'GET', {})
+            .then(response => Promise.resolve(response.data));
+    }
+
     executeApiCommand(path, action, body) {
         return new Promise((resolve, reject) => {
             request({
