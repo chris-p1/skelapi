@@ -3,6 +3,7 @@
     "version": "1.0.0",
     "description": "Skeleton Zengine API CLI tool",
     "main": "skelapi",
+    "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
     },
@@ -13,6 +14,7 @@
     "license": "ISC",
     "dependencies": {
         "dotenv": "^16.0.1",
+        "node-fetch": "^3.2.9",
         "request": "^2.88.2",
         "yargs": "^17.5.1"
     }
