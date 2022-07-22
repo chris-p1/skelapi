@@ -27,7 +27,7 @@ Clone the repo.
 
 Change the executable permissions on the `skelapi` script.
 
-    chmod +x skelapi
+    chmod +x skelapi.js
 
 
 <a id="org8a677eb"></a>
