@@ -6,7 +6,7 @@ import yargs from 'yargs';
 // import { hideBin } from 'yargs/helpers';
 
 // const zApi = require('./lib/api');
-import * as api from './src/model/api.js';
+import * as api from './src/service/api.js';
 import * as utils from './src/lib/utils.js';
 
 const argv = yargs(process.argv.slice(2))
@@ -91,7 +91,9 @@ const reqHandlers = {
             // debug
             console.log(`url: ${url}`);
             // TODO :: add queries to API 
-            const getForms = getApi({ endpoint: 'forms' });
+            const getForms = getApi(
+                { endpoint: 'forms' },
+                { workspaceId: argv.for });
             await getForms(logResponse);
             break;
         case 'field':
@@ -114,7 +116,11 @@ const reqHandlers = {
         case 'test':
             // debug
             // console.log(getTestApi.name);
-            await getTestApi(logResponse);
+            await getTestApi(logResponse,
+                             { test1: "hey!",
+                               test2: "TED!",
+                               test3: "ALEX!"
+                             });
             // getTest();
             break;
         }
@@ -138,6 +144,9 @@ const reqHandlers = {
         switch (command) {
         case 'get':
             reqType = 'get';
+            break;
+        case 'form':
+            target = 'form';
             break;
         case 'forms':
             target = 'forms';
