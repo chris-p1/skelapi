@@ -39,8 +39,16 @@ const argv = yargs(process.argv.slice(2))
       .nargs('t', 1)
       .help('h')
       .alias('h', 'help')
+      .count('verbose')
+      .alias('v', 'verbose')
 //      .epilog('hi')
       .argv;
+
+const VERBOSE_LEVEL = argv.verbose;
+
+const WARN = (msg) => { VERBOSE_LEVEL >= 0 && console.log(msg); }
+const INFO = (msg) => { VERBOSE_LEVEL >= 1 && console.log(msg); }
+const DEBUG = (msg) => { VERBOSE_LEVEL >= 2 && console.log(msg); }
 
 const ACCESS_TOKEN = argv.token || process.env.ACCESS_TOKEN;
 let API_URL = '';
@@ -51,23 +59,22 @@ if (argv.version) {
 }
 
 const getEnvUrl = env => {
+    DEBUG('Setting API base URL environment');
     switch (env) {
     case 'prod':
         API_URL = 'https://api.zenginehq.com/v1';
+        DEBUG(`API URL set to ${API_URL}`);
         return 'https://api.zenginehq.com/v1';
     case 'stage':
         API_URL = 'https://api.stage.zenginehq.dev/v1';
+        DEBUG(`API URL set to ${API_URL}`);
         return 'https://api.stage.zenginehq.dev/v1';
     default:
-        console.error('Error: Invalid environment: \"' + argv.env + '\"');
+        WARN('Error: Invalid environment: \"' + argv.env + '\"');
         process.exit(1);
         break;
     }
 }
-// const api = new zApi(
-//     API_URL,
-//     ACCESS_TOKEN
-// );
 
 const reqHandlers = {
     get: async (target) => {
@@ -80,16 +87,10 @@ const reqHandlers = {
 
         switch (target) {
         case 'form':
-            console.log('form' + '!');
-            // debug
-            console.log(`url: ${url}`);
             const getForm = getApi({ endpoint: 'forms', id: argv.for });
             await getForm(logResponse);
             break;
         case 'forms':
-            console.log('forms' + '!');
-            // debug
-            console.log(`url: ${url}`);
             // TODO :: add queries to API 
             const getForms = getApi(
                 { endpoint: 'forms' },
@@ -134,13 +135,15 @@ const reqHandlers = {
     // if (!ACCESS_TOKEN || !await api.tokenCheck(ACCESS_TOKEN)) {
     //     utils.parseError('Invalid access token:', '"' + ACCESS_TOKEN + '"');
     // }
-
+    DEBUG('Log level 2 mode on');
+    INFO('Verbose mode on');
     let reqType;
     let target;
     let targetId = argv['for'];
     
     argv._.forEach((command) => {
         
+        DEBUG(`Parsing command '${command}'.`);
         switch (command) {
         case 'get':
             reqType = 'get';
@@ -153,7 +156,6 @@ const reqHandlers = {
             break;
         case 'test':
             // debug
-            console.log('Argv processing!');
             target = 'test';
             break;
         case 'fields':
