@@ -11,7 +11,7 @@ import * as utils from './src/lib/utils.js';
 
 const argv = yargs(process.argv.slice(2))
       .usage('Usage: $0 <command> [options]')
-      .command('get', 'run a GET request')
+      .command('get', 'run a GET request on <resource>')
       .example('$0 get fields --for <formID>', 'get all fields for <formID>')
       .command('forms', 'run request on forms for a workspace')
       .example('$0 get forms --for <workspaceID>', 'get all fields for <workspaceID>')
@@ -93,8 +93,9 @@ const reqHandlers = {
         case 'forms':
             // TODO :: add queries to API 
             const getForms = getApi(
-                { endpoint: 'forms' },
-                { workspaceId: argv.for });
+                { endpoint: 'forms',
+                  "workspace.id": argv.for
+                });
             await getForms(logResponse);
             break;
         case 'field':
@@ -132,10 +133,14 @@ const reqHandlers = {
 };
 
 (async () => {
-    // if (!ACCESS_TOKEN || !await api.tokenCheck(ACCESS_TOKEN)) {
-    //     utils.parseError('Invalid access token:', '"' + ACCESS_TOKEN + '"');
-    // }
+    if (!ACCESS_TOKEN ||
+        !await api.checkToken(ACCESS_TOKEN)(getEnvUrl(argv.env)))
+    {
+        utils.parseError('Invalid access token:', '"' + ACCESS_TOKEN + '"');
+    }
     DEBUG('Log level 2 mode on');
+    // debug
+    DEBUG(`token: ${ACCESS_TOKEN}`);
     INFO('Verbose mode on');
     let reqType;
     let target;
@@ -146,24 +151,27 @@ const reqHandlers = {
         DEBUG(`Parsing command '${command}'.`);
         switch (command) {
         case 'get':
+            DEBUG('Target request type set to \'get\'.');
             reqType = 'get';
             break;
         case 'form':
+            DEBUG('Target resource set to \'form\'.');
             target = 'form';
             break;
         case 'forms':
+            DEBUG('Target resource set to \'forms\'.');
             target = 'forms';
             break;
         case 'test':
-            // debug
+            DEBUG('Target resource set to \'test\'.');
             target = 'test';
             break;
         case 'fields':
-            console.log('argv fields!');
+            DEBUG('Target resource set to \'fields\'.');
             target = 'fields';
             break;
         case 'field':
-            console.log('argv field!');
+            DEBUG('Target resource set to \'field\'.');
             target = 'field';
             break;
         default:

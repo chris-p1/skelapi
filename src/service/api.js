@@ -44,19 +44,40 @@ export const getApi = (url, accessToken) => (
     { endpoint,
       id = null,
       resource = null,
-      resourceId = null
+      resourceId = null,
+      queries = null
     },
-    { ...queries } = {}
 ) => async (fn) => {
-       
+
+    const stringify = queries => {
+        let queryStr = '';
+        for (query in queries) {
+            queryStr += `&${queries[query]}=${query}`;
+        }
+        return queryStr;
+    };
+    
     try {
-        const response = await fetch(`${url}/${endpoint}${id ? `/${id}` : ''}${resource ? `/${resource}` : ''}${resourceId ? `/${resourceId}` : ''}.json?access_token=${accessToken}`);
+        const response =
+              await fetch(`${url}/${endpoint}${id ? `/${id}` : ''}${resource ? `/${resource}` : ''}${resourceId ? `/${resourceId}` : ''}.json?access_token=${accessToken}${queries ? stringify(queries) : ''}`);
         const data = await response.json();
         
         return fn(data);
     } catch (err) {
-        console.error(err.message);
+        // console.error(err.message);
+        console.error(err);
         throw err;
     }    
+};
+
+export const checkToken = token => async (url) => {
+    const getWorkspaces = getApi(url, token)({ endpoint: 'workspaces' });
+    try {
+        const isValid = res => res.totalCount > 0;
+        return await getWorkspaces(isValid);
+    } catch (err) {
+        console.error(err.message);
+        throw err;
+    }
 };
 
