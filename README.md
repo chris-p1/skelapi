@@ -8,6 +8,7 @@
     2.  [Simple example:](#org320ebab)
 4.  [TODOs](#org7e50139)
 
+![skellies](./skellies.webp)
 
 <a id="orgd64d8e9"></a>
 
@@ -26,7 +27,7 @@ Clone the repo.
 
 Change the executable permissions on the `skelapi` script.
 
-    chmod +x skelapi
+    chmod +x skelapi.js
 
 
 <a id="org8a677eb"></a>
