@@ -2,7 +2,10 @@
     "name": "skelapi",
     "version": "1.0.0",
     "description": "Skeleton Zengine API CLI tool",
-    "main": "skelapi",
+    "main": "index.js",
+    "bin": {
+        "skelapi": "index.js"
+    },
     "type": "module",
     "scripts": {
         "test": "echo \"Error: no test specified\" && exit 1"
