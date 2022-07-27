@@ -21,13 +21,18 @@ A CLI tool for playing with the Zengine API.
 
 # Installation
 
-Clone the repo.
+Clone the repo. once cloned, change into the project directory.
 
     git clone git@github.com:chris-p1/skelapi.git
+    cd skelapi
 
-Change the executable permissions on the `skelapi` script.
+Change the executable permissions on `index.js`.
 
-    chmod +x skelapi.js
+    chmod +x index.js
+
+Install the npm package globally
+
+    npm install -g
 
 
 <a id="org8a677eb"></a>
@@ -39,16 +44,16 @@ Change the executable permissions on the `skelapi` script.
 
 ## Synopsis
 
-    skelapi <reqType> <target> --for <targetId> --env <env> [--token <token>] [--help] [--version]
+    skelapi <command> <resource> <resource-id> --env <env> --token <token> [--help] [--version] [--within <id>]
 
-`skelapi` takes a request type, i.e, `get`, `put`, `post`, or `del`, which it then applies to a `target`&#x2013;That is, the data you are trying to request from Zengine. To see a full list of all available targets, see `--help`.
+`skelapi` takes a request type, i.e, `get`, `put`, `post`, or `del`, which it then applies to a `resource`&#x2013;That is, the data you are trying to request from Zengine. To see a full list of all available resources, see `--help`.
 
 
 <a id="org320ebab"></a>
 
 ## Simple example:
 
-    ./skelapi get forms --for 1111 --env prod --token myreallylongaccesstoken
+    ./skelapi get forms 1234 --env prod --token myreallylongaccesstoken
 
 `skelapi` also supports the use of a `.env` file, so the `--token` can be set from this file instead of being passed as an argument.
 
