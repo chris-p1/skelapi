@@ -22,6 +22,16 @@ const argv = yargs(process.argv.slice(2))
                            })
                  }
                })
+      .command({ command: 'mass-delete <resource> <resource-id> [options]',
+                 desc: 'delete all of <resource> with given <resource-id>',
+                 builder: (yargs) =>
+                 { return yargs
+                   .option('within',
+                           { alias: ['w', 'i'],
+                             describe: 'The id of the target endpoint, if needed',
+                           })
+                 }
+               })
       .option('env',
               { describe: 'Environment to run request in.',
                 requiresArg: true,
@@ -32,7 +42,7 @@ const argv = yargs(process.argv.slice(2))
               { describe: 'Developer access token.',
                 requiresArg: true,
                 demandOption:true,
-                alias: ['a','t']
+                alias: ['a','t', 'token']
               })
       .help('h')
       .alias('h', 'help')
