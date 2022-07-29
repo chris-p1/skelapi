@@ -53,11 +53,18 @@ Install the npm package globally
 
 ## Simple example:
 
-    skelapi get forms 1234 --env prod --token myreallylongaccesstoken
+    skelapi print forms 1234 -v -p --env prod --token myreallylongaccesstoken
 
-`skelapi` also supports the use of a `.env` file, so the `--token` can be set from this file instead of being passed as an argument.
+`skelapi` also supports the use of a `.env` file, so the `--token` and `--env` arguments can be set from this file instead of being passed as an argument.
 
-    skelapi get forms --for 1111 --env stage
+The `.env` file can be set by prefixing with `SKELAPI`.
+
+    SKELAPI_ACCESS_TOKEN=mytoken
+    SKELAPI_ENV=stage
+
+Now, the shorter command will work.
+
+    skelapi print forms 1111 -v -p
 
 
 <a id="org7e50139"></a>
