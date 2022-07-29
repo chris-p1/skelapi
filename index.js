@@ -87,15 +87,16 @@ if (argv.version) {
     process.exit(0);
 }
 
-
-
 (async () => {
-    
+
     utils.setVerboseLevel(argv.verbose);
     utils.log('debug', `Verbose level set to ${argv.verbose}`);
     utils.log('debug', `Access Token: ${argv.accessToken}`);
     utils.log('info', 'Checking access token...');
-    if (!await api.checkToken(argv.accessToken)(utils.getEnvUrl(argv.env))) {
+    
+    const tokenValidity = await api.checkToken(argv.accessToken)(utils.getEnvUrl(argv.env));
+    
+    if (!tokenValidity) {
         utils.parseError('Expired/Invalid access token:', '"' + argv.accessToken + '"');
     }
 
