@@ -4,6 +4,8 @@ import 'dotenv/config';
 import yargs from 'yargs';
 
 import { parse } from './lib/parser.js';
+import * as api from './lib/api.js';
+import * as utils from './lib/utils.js';
 
 const argv = yargs(process.argv.slice(2))
       .env('SKELAPI')
@@ -22,7 +24,37 @@ const argv = yargs(process.argv.slice(2))
                            })
                  }
                })
-      .command({ command: 'mass-delete <resource> <resource-id> [options]',
+      .command({ command: 'put <resource> <resource-id> [options]',
+                 desc: 'run a PUT request on <resource> using the relevant <resource-id>',
+                 builder: (yargs) =>
+                 { return yargs
+                   .option('within',
+                           { alias: ['w', 'i'],
+                             describe: 'The id of the target endpoint, if needed'
+                           })
+                   .option('body',
+                           { alias: ['b'],
+                             describe: 'Body of the request. In-line or filepath accepted',
+                             requiresArg: true,
+                             demandOption: true
+                           })
+                 }
+               })
+      .command({ command: 'print <resource> <resource-id> [options]',
+                 desc: 'print <resource> to console using the relevant <resource-id>',
+                 builder: (yargs) =>
+                 { return yargs
+                   .option('within',
+                           { alias: ['w', 'i'],
+                             describe: 'The id of the target endpoint, if needed'
+                           })
+                   .option('pretty-print',
+                           { alias: ['p'],
+                             describe: 'Pretty-print the output',
+                           })
+                 }
+               })
+       .command({ command: 'mass-delete <resource> <resource-id> [options]',
                  desc: 'delete all of <resource> with given <resource-id>',
                  builder: (yargs) =>
                  { return yargs
@@ -55,8 +87,19 @@ if (argv.version) {
     process.exit(0);
 }
 
-(async () => {
 
-    parse(argv);
+
+(async () => {
+    
+    utils.setVerboseLevel(argv.verbose);
+    utils.log('debug', `Verbose level set to ${argv.verbose}`);
+    utils.log('debug', `Access Token: ${argv.accessToken}`);
+    utils.log('info', 'Checking access token...');
+    if (!await api.checkToken(argv.accessToken)(utils.getEnvUrl(argv.env))) {
+        utils.parseError('Expired/Invalid access token:', '"' + argv.accessToken + '"');
+    }
+
+    const exitStatus = await parse(argv);
+    process.exit(exitStatus);
  
 })();
