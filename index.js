@@ -76,6 +76,12 @@ const argv = yargs(process.argv.slice(2))
                 demandOption:true,
                 alias: ['a','t', 'token']
               })
+      .option('data-dir',
+              { describe: 'Overrides default data directory. (./data)',
+                requiresArg: true,
+                demandOption:false,
+                alias: ['d', 'dir']
+              })
       .help('h')
       .alias('h', 'help')
       .count('verbose')
@@ -91,6 +97,12 @@ if (argv.version) {
 
     utils.setVerboseLevel(argv.verbose);
     utils.log('debug', `Verbose level set to ${argv.verbose}`);
+    
+    if (argv.d) {
+        utils.setDataDir(argv.d)
+        utils.log('debug', `Data directory set to ${argv.d}`);
+    };
+    
     utils.log('debug', `Access Token: ${argv.accessToken}`);
     utils.log('info', 'Checking access token...');
     
