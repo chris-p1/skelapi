@@ -69,6 +69,12 @@ Now, the shorter command will work.
 
 <a id="org7e50139"></a>
 
+# Features
+
+## Composability
+
+Skelapi was designed with composability in mind. Functions are kept as small and single-purpose as possible to encourage reusability. The goal is to enable rapid development of additional commands. New commands can be added with relative ease. The `./lib/cmds` folder contains every command available to the CLI. From there, you can build your own by composing new functionality from the existing utilities and commands.
+
 # TODOs
 
 Feel free to use this however you see fit! I'll take any PRs as well.
